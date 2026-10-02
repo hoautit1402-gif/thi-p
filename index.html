@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Happy Birthday Ngoan Xinh Yêu :3</title>
+    <style>
+        :root {
+            --bg: #0b0b1a;
+            --pink: #ff5fb0;
+            --card: #fff;
+            --ink: #c4527f;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg);
+            overflow: hidden;
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #fff
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%
+        }
+
+        .scene {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center
+        }
+
+        .scene.on {
+            display: flex
+        }
+
+        #word {
+            font: 700 clamp(44px, 16vw, 110px) Georgia, serif;
+            color: var(--pink);
+            text-shadow: 0 0 24px #ff5fb0, 0 0 60px #ff2d8f;
+            letter-spacing: .05em;
+            z-index: 2
+        }
+
+        .heart {
+            width: 110px;
+            height: 100px;
+            position: relative;
+            z-index: 2;
+            animation: beat 1s infinite
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 55px;
+            height: 88px;
+            background: var(--pink);
+            border-radius: 55px 55px 0 0;
+            box-shadow: 0 0 30px #ff5fb0
+        }
+
+        .heart:before {
+            left: 55px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%
+        }
+
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%
+        }
+
+        @keyframes beat {
+            50% {
+                transform: scale(1.18)
+            }
+        }
+
+        #sticker {
+            font-size: 90px;
+            animation: float 2.4s ease-in-out infinite
+        }
+
+        @keyframes float {
+            50% {
+                transform: translateY(-14px)
+            }
+        }
+
+        .hint {
+            margin-top: 28px;
+            opacity: .75;
+            font-size: 15px;
+            animation: pulse 1.6s infinite
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .25
+            }
+        }
+
+        .paper {
+            width: min(70vw, 260px);
+            aspect-ratio: 3/4;
+            background: #fff;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 54px;
+            box-shadow: 0 0 60px rgba(255, 255, 255, .5);
+            cursor: pointer;
+            z-index: 2
+        }
+
+        .msg {
+            background: #fff;
+            color: var(--ink);
+            width: min(88vw, 420px);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-style: italic;
+            min-height: 24px;
+            box-shadow: 0 6px 24px #0008;
+            z-index: 2
+        }
+
+        #hs {
+            position: relative;
+            width: 0;
+            height: 0;
+            transform-style: preserve-3d;
+            z-index: 2
+        }
+
+        #stage {
+            perspective: 900px;
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .tile {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            margin: -15px 0 0 -15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            filter: drop-shadow(0 0 8px #ff5fb0)
+        }
+
+        #wish {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
+            background: linear-gradient(transparent, #0b0b1aee 30%);
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center
+        }
+
+        #wish textarea {
+            width: min(92vw, 440px);
+            height: 112px;
+            border-radius: 12px;
+            border: 1px solid #ff5fb0;
+            background: #1a1530;
+            color: #fff;
+            padding: 10px;
+            font: 16px Georgia, serif;
+            resize: none
+        }
+
+        #wish button {
+            background: var(--pink);
+            color: #2a0a1a;
+            border: 0;
+            border-radius: 20px;
+            padding: 9px 26px;
+            font: 600 15px Georgia, serif
+        }
+
+        #list {
+            width: min(92vw, 440px);
+            max-height: 90px;
+            overflow: auto;
+            font-size: 15px;
+            font-style: italic;
+            text-align: left
+        }
+
+        #list div {
+            background: #fff;
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin-bottom: 5px
+        }
+
+        #skip {
+            position: fixed;
+            right: 14px;
+            top: calc(env(safe-area-inset-top, 0px) + 12px);
+            z-index: 5;
+            background: none;
+            border: 1px solid #fff5;
+            color: #fffa;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 13px
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="cv"></canvas>
+    <button id="skip">Bỏ qua ›</button>
+
+    <div class="scene on" id="s1">
+        <div id="word"></div>
+    </div>
+
+    <div class="scene" id="s2">
+        <div id="sticker">🎂</div>
+        <div class="hint">Chạm để mở thiệp</div>
+    </div>
+
+    <div class="scene" id="s3">
+        <div class="paper" id="paper">💌</div>
+        <div class="hint">Chạm vào thiệp</div>
+    </div>
+
+    <div class="scene" id="s4">
+        <div class="msg" id="msg"></div>
+    </div>
+
+    <div class="scene" id="s5">
+        <div id="stage">
+            <div id="hs"></div>
+        </div>
+        <div id="wish">
+            <div id="list"></div><textarea id="wt"
+                placeholder="Viết lời chúc của bạn gửi chị Vân Anh...">Tuổi mới em không mong gì hơn, chúc chị bình an trên con đường mình chọn, luôn cố gắng để đạt được điều mình thích, có chuyện gì thì hãy nói em nhé!!</textarea><button
+                id="send">Gửi lời chúc 💌</button>
+        </div>
+    </div>
+
+    <script>
+        // ====== TÙY CHỈNH ======
+        const NAME = "Chị Vân Anh";
+        const MESSAGES = [
+            "Happy Birthday, chị Vân Anh ♥",
+            "Chúc chị luôn xinh đẹp và rạng rỡ.",
+            "Mong chị mỗi ngày đều bình an và hạnh phúc.",
+            "Tuổi mới thật nhiều niềm vui nhé chị!"
+        ];
+        // ========================
+
+        const $ = id => document.getElementById(id);
+        const cv = $('cv'), ctx = cv.getContext('2d');
+        let W, H, mode = 'rain', drops = [], stars = [], textRain = false, tdrops = [];
+        const LOVE = ["Chúc mừng sinh nhật chị Vân Anh 🎂", " thương chị nhiều lắm ♥", "Chị luôn xinh đẹp và rạng rỡ", "mạnh mẽ lên chị nhé!!", "Chị bình an nhé", "Có em ở đây với chị", "Sinh nhật vui vẻ chị ơi", " ♥", "Chị cười lên là đẹp nhất", "Mong chị mãi hạnh phúc", "Chị là người đặc biệt", "Có chuyện gì cứ nói em nhé","♥","♥","♥"];
+        function newDrop(top) {return {t: LOVE[Math.random() * LOVE.length | 0], x: Math.random() * W, y: top ? -20 : Math.random() * H, v: .6 + Math.random() * 1.1, f: 13 + Math.random() * 7 | 0, a: .35 + Math.random() * .5, c: Math.random() < .5 ? '#ffb6d9' : '#ff5fb0'}}
+        const COLS = ['#ff5fb0', '#ffb6d9', '#ff2d8f'];
+
+        function resize() {
+            W = cv.width = innerWidth; H = cv.height = innerHeight;
+            drops = Array.from({length: Math.floor(W / 16)}, () => Math.random() * H / 16 | 0);
+            stars = Array.from({length: 140}, () => ({x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .3, p: Math.random() * 6}))
+        }
+        addEventListener('resize', resize); resize();
+
+        function frame(t) {
+            if (mode === 'rain') {
+                ctx.fillStyle = 'rgba(11,11,26,.12)'; ctx.fillRect(0, 0, W, H);
+                ctx.font = '14px monospace';
+                drops.forEach((y, i) => {
+                    ctx.fillStyle = COLS[i % 3];
+                    ctx.fillText(Math.random() < .5 ? '0' : '1', i * 16, y * 16);
+                    drops[i] = (y * 16 > H && Math.random() > .975) ? 0 : y + 1;
+                });
+            } else {
+                ctx.fillStyle = '#0b0b1a'; ctx.fillRect(0, 0, W, H);
+                stars.forEach(s => {
+                    ctx.globalAlpha = .4 + .6 * Math.abs(Math.sin(t / 900 + s.p));
+                    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 7); ctx.fill()
+                });
+                ctx.globalAlpha = 1;
+                if (textRain) {
+                    if (!tdrops.length) tdrops = Array.from({length: Math.max(10, W / 40 | 0)}, () => newDrop(false));
+                    tdrops.forEach((d, i) => {
+                        d.y += d.v; ctx.font = `italic ${d.f}px Georgia,serif`;
+                        const w = ctx.measureText(d.t).width;
+                        ctx.globalAlpha = d.a * Math.min(1, d.y / 80) * Math.min(1, (H - d.y) / 120 + .2);
+                        ctx.fillStyle = d.c; ctx.shadowColor = d.c; ctx.shadowBlur = 8;
+                        ctx.fillText(d.t, Math.min(d.x, W - w - 8), d.y);
+                        ctx.shadowBlur = 0;
+                        if (d.y > H + 20) tdrops[i] = newDrop(true);
+                    });
+                    ctx.globalAlpha = 1;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+
+        function show(id) {
+            document.querySelectorAll('.scene').forEach(s => s.classList.remove('on')); $(id).classList.add('on');
+            mode = id === 's1' ? 'rain' : 'stars'
+        }
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        async function intro() {
+            const w = $('word');
+            for (const x of ['3', '2', '1', 'HAPPY', 'BIRTHDAY', NAME.toUpperCase()]) {
+                w.textContent = x; w.style.fontSize = x.length > 6 ? 'clamp(30px,10vw,70px)' : ''; await sleep(x.length > 1 ? 1100 : 800)
+            }
+            w.innerHTML = '<div class="heart"></div>'; await sleep(1600);
+            show('s2');
+        }
+        $('s2').onclick = () => show('s3');
+        $('paper').onclick = () => {show('s4'); slides()};
+
+        async function type(el, txt) {el.textContent = ''; for (const c of txt) {el.textContent += c; await sleep(45)} }
+        async function slides() {
+            for (let i = 0; i < MESSAGES.length; i++) {
+                await type($('msg'), MESSAGES[i]); await sleep(1800);
+            }
+            show('s5'); heartScene();
+        }
+
+        function heartScene() {
+            textRain = true;
+            const hs = $('hs'); hs.innerHTML = '';
+            const n = 34, sc = Math.min(innerWidth, innerHeight * .7) / 40;
+            for (let i = 0; i < n; i++) {
+                const t = i / n * Math.PI * 2;
+                const x = 16 * Math.sin(t) ** 3, y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+                const d = document.createElement('div'); d.className = 'tile'; d.textContent = ['💗', '💖', '💕'][i % 3];
+                d.style.transform = `translate3d(${x * sc}px,${y * sc}px,${(i % 3 - 1) * 14}px)`;
+                hs.appendChild(d);
+            }
+            hs.parentNode.style.paddingBottom = '140px';
+            let a = 0; (function spin() {a += .4; hs.style.transform = `rotateY(${Math.sin(a / 40) * 55}deg)`; requestAnimationFrame(spin)})();
+        }
+        $('send').onclick = () => {const t = $('wt').value.trim(); if (!t) return; const d = document.createElement('div'); d.textContent = t; $('list').appendChild(d); $('list').scrollTop = 1e5; $('wt').value = ''};
+        $('skip').onclick = () => {show('s5'); heartScene()};
+        intro();
+    </script>
+</body>
+
+</html>
